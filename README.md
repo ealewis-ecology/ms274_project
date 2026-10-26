@@ -16,7 +16,7 @@ I will use satellite wind and chlorophyll-a data to examine whether recent wind 
 
 - The 1 km ROMS model outputs associated with Kessouri et al. (2024) for DO, salinity, and temperature, with spiciness calculated from temperature and salinity.
 - Satellite data, with both sources covering the 1998–2016 study period:
-  - **Wind:** [RSS CCMP Version 3.1](https://podaac.jpl.nasa.gov/dataset/CCMP_WINDS_10M6HR_L4_V3.1), providing six-hourly surface wind vectors at 10 m on a 0.25° grid. 
+  - **Wind:** [RSS CCMP Version 3.1](https://www.remss.com/measurements/ccmp/), providing six-hourly surface wind vectors at 10 m on a 0.25° grid. 
   - **Ocean color:** [ESA Ocean Colour Climate Change Initiative (OC-CCI) Version 6.0](https://www.oceancolour.org/thredds/catalog-cci.html?dataset=CCI_ALL-v6.0-1km-DAILY), providing daily surface chlorophyll-a on a 1 km grid from multiple ocean-color satellites (Sathyendranath et al., 2019). 
 
 ### Figures
