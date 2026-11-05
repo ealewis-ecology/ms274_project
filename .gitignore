@@ -9,7 +9,9 @@ __pycache__/
 # ignore data
 data/
 data
-
+*.nc
+*.nc.partial
+notebooks/**/*.png
 # annoying osx files
 .DS_Store
 
