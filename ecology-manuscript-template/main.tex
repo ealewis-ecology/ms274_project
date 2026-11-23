@@ -1,0 +1,46 @@
+% Main entry point. Overleaf: select main.tex and pdfLaTeX (TeX Live 2024 or newer).
+% Compile with latexmk -pdf main.tex. Biber handles both reference sections.
+% EDITING MAP: metadata.tex = identity; sections/ = manuscript content;
+% references.bib = citations; ecology.sty = shared formatting.
+% Keep this entry point mostly unchanged when writing your own manuscript.
+\documentclass[11pt]{article}
+\providecommand{\ReviewMode}{1} % 1 = review; 0 = reading. See reading.tex.
+\input{metadata}
+\usepackage{ecology}
+\addbibresource{references.bib}
+% Optional counts remain available as macros but are not printed on the title page.
+% Regenerate wordcounts.tex with count-words.py after editing your prose.
+\InputIfFileExists{wordcounts.tex}{}{%
+  \newcommand{\AbstractWordCount}{Not supplied}%
+  \newcommand{\MainWordCount}{Not supplied}}
+\title{\ManuscriptTitle}
+\author{\AuthorBlock}
+\date{}
+\begin{document}
+\maketitle
+\thispagestyle{plain}
+\begin{center}
+  {\small\sffamily\ArticleType\quad\textbullet\quad\RevisionDate}
+\end{center}
+
+% A refsection gives this part an independent bibliography from the shared database.
+% Keep citations and printbibliography inside the same refsection.
+\begin{refsection}
+% Start line numbering after the title; the reading entry point disables it.
+\BeginReview
+\section*{Abstract}
+\input{sections/abstract}\par
+\smallskip\noindent\textbf{Keywords:} \Keywords
+\input{sections/manuscript}
+\EndReview
+\printbibliography[heading=bibintoc,title={References}]
+\end{refsection}
+% Resets counters and adds S prefixes; also starts the supplement-only contents.
+% Do not reset these counters manually inside sections/supplement.tex.
+\StartSupplement
+\begin{refsection}
+\input{sections/supplement}
+\EndReview
+\printbibliography[heading=bibintoc,title={Supplementary references}]
+\end{refsection}
+\end{document}

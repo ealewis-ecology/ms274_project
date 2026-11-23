@@ -1,0 +1,76 @@
+% Replace the illustrative prose and model with your own study.
+% Keep stable, unique labels (sec:, eq:, fig:, tab:) and refer with \cref.
+% Example: \label{fig:your-result} belongs AFTER its caption.
+% TeXcount: count prose only; headers, captions and mathematics are excluded by the helper.
+\section{Introduction}\label{sec:introduction}
+A manuscript should make its biological question clear before introducing the machinery used to answer it. State what is known, what remains uncertain and why the proposed analysis can resolve that uncertainty. Classic population models offer a convenient example for demonstrating notation and references \citep{lotka1925,may1972}.
+
+\linelabel{line:question-start}% Marks the first line of this paragraph in review mode.
+The example question is how density-dependent growth approaches a carrying capacity. Every symbol, assumption and measurement should be defined before it carries an argument. The model below is illustrative; it is not presented as a fitted model or evidence about a real population.\linelabel{line:question-end}
+
+\section{Methods}\label{sec:methods}
+\subsection{Model and assumptions}
+Let $N(t)>0$ denote abundance, $r>0$ the intrinsic growth rate and $K>0$ the carrying capacity. Logistic growth is written as
+\begin{equation}\label{eq:logistic}
+  \frac{\dd N}{\dd t}=rN\left(1-\frac{N}{K}\right).
+\end{equation}
+The same model can be written using scaled abundance $n=N/K$ and time $\tau=rt$:
+\begin{align}
+  \frac{\dd n}{\dd\tau} &= n(1-n),\label{eq:scaled}\\
+  n(\tau) &= \frac{1}{1+(n_0^{-1}-1)e^{-\tau}}.\label{eq:solution}
+\end{align}
+Use \texttt{\textbackslash cref} for references such as \cref{eq:logistic,eq:scaled}; the object name is generated with the number. Use \texttt{\textbackslash citep} for parenthetical citations and \texttt{\textbackslash citet} for narrative citations. For example, \citet{may1972} connects ecological questions with mathematical analysis.
+
+\begin{ecobox}{What the example assumes}
+The environment and parameters are constant, abundance is continuous, and the population is closed. These assumptions determine the scope of the model. Explain their biological meaning before interpreting a result.
+\end{ecobox}
+
+\subsection{Mathematical statements}
+\begin{proposition}\label{prop:limit}
+For $n_0>0$, the solution in \cref{eq:solution} converges to $1$ as $\tau\to\infty$.
+\end{proposition}
+\begin{proof}
+The denominator of \cref{eq:solution} tends to $1$ because $e^{-\tau}\to0$. It remains positive for $n_0>0$ and $\tau\geq0$, so the solution is well-defined.
+\end{proof}
+\Cref{prop:limit} separates a demonstrated mathematical conclusion from its biological interpretation. Additional derivations belong in \cref{sec:supp-derivation}.
+
+\section{Results}\label{sec:results}
+The illustrative trajectories in \cref{fig:trajectories} approach the same equilibrium from different initial abundances. They are sampled model trajectories, not observations, fitted estimates or uncertainty intervals. \Cref{tab:notation} keeps notation and units explicit.
+% TeXcount ignores this float block. Put new figures and tables inside equivalent
+% TC markers if they should be excluded from prose-only word counts.
+% For your own plot, replace the input below with \includegraphics[width=\linewidth]{file}.
+% Store the image in figures/ and keep the caption and label here.
+%TC:ignore
+\begin{figure}[htbp]
+  \centering
+  \input{figures/example-figure}
+  \caption{Illustrative logistic trajectories. Scaled abundance is shown against scaled time for $n_0=0.1$ (solid line) and $n_0=0.5$ (dashed line). The dotted horizontal line marks the equilibrium $n=1$. Both trajectories follow \cref{eq:solution}; no empirical data are used.}
+  \label{fig:trajectories}
+\end{figure}
+\begin{table}[htbp]
+  \caption{Notation in the illustrative model. Units must be compatible with the abundance and time definitions.}
+  \label{tab:notation}
+  \centering
+  \begin{tabularx}{\linewidth}{@{}lXl@{}}\toprule
+    Symbol & Meaning & Units\\\midrule
+    $N$ & Population abundance & Individuals\\
+    $r$ & Intrinsic growth rate & Time$^{-1}$\\
+    $K$ & Carrying capacity & Individuals\\
+    $n$ & Scaled abundance, $N/K$ & Dimensionless\\
+    $\tau$ & Scaled time, $rt$ & Dimensionless\\\bottomrule
+  \end{tabularx}
+\end{table}
+%TC:endignore
+
+% Flush pending Results floats before the Discussion; remove if your journal
+% expects figures collected at the end instead.
+\FloatBarrier
+\section{Discussion}\label{sec:discussion}
+Explain which conclusion follows from which evidence, distinguish mathematical results from empirical inference, and discuss assumptions that may fail in the system of interest. \revision{This sentence demonstrates revision highlighting: blue in the review copy, plain text in the reading copy.}
+
+\section*{Acknowledgements}
+Replace this example with acknowledgements and funding information.
+\section*{Author contributions}
+Specify who designed the study, developed the theory, collected or curated data, performed analyses and wrote the manuscript. Use the target journal's requested taxonomy.
+\section*{Open research statement}
+This demonstration uses no empirical data. Its figure follows the equation printed in the text. For your study, replace this paragraph with the actual data and code locations, access conditions, licenses and version identifiers.

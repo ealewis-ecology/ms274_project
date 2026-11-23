@@ -1,0 +1,37 @@
+% Add supplementary sections here; S numbering is already configured by main.tex.
+% Use unique labels (for example sec:supp-...) even when repeating a main-text topic.
+% Cite normally: only references cited here enter the supplementary bibliography.
+\section{Derivation of the solution}\label{sec:supp-derivation}
+The supplement has its own section, equation, figure, table, theorem and page numbering. Its bibliography includes only references cited in this reference section. A reference can appear in both bibliographies when cited in both parts \citep{lotka1925}.
+
+Separating variables in \cref{eq:scaled} yields
+\begin{equation}\label{eq:supp-integral}
+  \int\frac{\dd n}{n(1-n)}=\int\dd\tau.
+\end{equation}
+Integrating gives $\log[n/(1-n)]=\tau+C$ when $0<n<1$; the initial condition determines $C$. This produces \cref{eq:solution}. For $n_0>1$, an absolute value inside the logarithm yields the same final expression. The equilibrium case $n_0=1$ is handled directly.
+
+\begin{lemma}\label{lemma:supp}
+The scaled solution is constant when $n_0=1$.
+\end{lemma}
+\begin{proof}
+Substitute $n_0=1$ into \cref{eq:solution}.
+\end{proof}
+
+\section{Reporting checks}\label{sec:supp-checks}
+A reproducible analysis should identify data provenance, the model version, units, random seeds where relevant and the software environment. A concrete example of a simulation protocol for ecological models is described by \citet{grimm2006}.
+%TC:ignore
+\begin{table}[htbp]
+\caption{Example supplement checklist. Replace each item with the information needed to reproduce your study.}\label{tab:supp}
+\begin{tabularx}{\linewidth}{@{}lX@{}}\toprule
+Item & What to record\\\midrule
+Inputs & Source, version, access conditions and units\\
+Model & Equations, assumptions and parameter values\\
+Analysis & Code version, environment and numerical tolerances\\
+Outputs & Figure scripts, intermediate products and uncertainty definitions\\\bottomrule
+\end{tabularx}
+\end{table}
+\begin{figure}[htbp]
+\centering\input{figures/example-figure}
+\caption{A repeated demonstration to verify supplementary figure numbering. In a real manuscript, include additional evidence or diagnostics here rather than repeating a main-text figure.}\label{fig:supp}
+\end{figure}
+%TC:endignore

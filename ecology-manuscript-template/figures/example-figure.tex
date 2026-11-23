@@ -1,0 +1,27 @@
+% Self-contained vector figure: no external image, font, shell escape or plotting runtime.
+% Positions are samples of n(tau)=1/[1+(1/n0-1)exp(-tau)].
+\setlength{\unitlength}{1mm}
+\begin{picture}(130,66)(-12,-12)
+\put(0,0){\vector(1,0){108}}\put(0,0){\vector(0,1){49}}
+\multiput(0,45)(4,0){26}{\line(1,0){1.5}}
+\put(-8,43){\small $1$}\put(-8,-2){\small $0$}
+\put(101,-6){\small $6$}\put(46,-11){\small Scaled time $\tau$}
+\put(-12,50){\small $n$}
+\linethickness{.8pt}
+\color{EcoAccent}
+\qbezier(0,4.5)(9,7)(17,10.44)
+\qbezier(17,10.44)(26,17)(34,20.28)
+\qbezier(34,20.28)(43,28)(51,31.08)
+\qbezier(51,31.08)(60,36.5)(68,38.61)
+\qbezier(68,38.61)(77,42)(85,42.43)
+\qbezier(85,42.43)(94,44)(102,44.02)
+\color{EcoChange}
+\qbezier[18](0,22.5)(9,29)(17,32.9)
+\qbezier[18](17,32.9)(26,37)(34,39.64)
+\qbezier[18](34,39.64)(43,42)(51,42.87)
+\qbezier[18](51,42.87)(60,44)(68,44.19)
+\qbezier[18](68,44.19)(77,44.6)(85,44.70)
+\qbezier[18](85,44.70)(94,44.9)(102,44.89)
+\color{black}
+\put(4,51){\small Solid: $n_0=0.1$ \qquad Dashed: $n_0=0.5$}
+\end{picture}

@@ -1,0 +1,155 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ecology}[2026/10/04 v2.0 Quantitative ecology manuscript tools]
+% Portable defaults: standard article class and widely available TeX Live packages.
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[english]{babel}
+\RequirePackage{lmodern,microtype}
+% PAGE LAYOUT: change a4paper to letterpaper if required by your journal.
+% Keep headheight large enough for the running header to avoid layout warnings.
+\RequirePackage[a4paper,margin=25mm,headheight=15pt]{geometry}
+\RequirePackage{amsmath,amssymb,amsthm,mathtools,bm}
+\RequirePackage{graphicx,booktabs,tabularx,caption,subcaption}
+\RequirePackage{aliascnt,placeins}
+\RequirePackage{setspace,enumitem,xcolor,fancyhdr,etoolbox}
+\RequirePackage[skins,breakable]{tcolorbox}
+\RequirePackage{titletoc}
+\RequirePackage{lineno}
+\RequirePackage{csquotes}
+% REFERENCES: compile with Biber, not BibTeX. natbib=true supplies citep/citet
+% compatibility commands; do not also load natbib. Change style here if needed.
+\RequirePackage[backend=biber,style=authoryear,natbib=true,giveninits=true,
+  maxcitenames=2,maxbibnames=99,uniquename=init,doi=true,url=false,isbn=false]{biblatex}
+% Load external-reference support before hyperref, and cleveref after hyperref.
+% response.tex uses this order to link to labels in the compiled review PDF.
+\RequirePackage{xr-hyper}
+\definecolor{EcoAccent}{HTML}{226D68}
+\definecolor{EcoInk}{HTML}{263238}
+\definecolor{EcoPale}{HTML}{F3F6F5}
+\definecolor{EcoChange}{HTML}{184F91}
+\RequirePackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=EcoAccent,citecolor=EcoAccent,urlcolor=EcoAccent,
+  pdfauthor={\AuthorNames},pdftitle={\ManuscriptTitle}}
+\RequirePackage[nameinlink,noabbrev]{cleveref}
+\urlstyle{same}
+\graphicspath{{figures/}}
+% FIGURES/TABLES: small, left-aligned captions; table captions belong above tables.
+% graphicspath lets \includegraphics{filename} find files placed in figures/.
+\captionsetup{font=small,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=false}
+\captionsetup[table]{position=top}
+\setlist{topsep=4pt,itemsep=2pt}
+\setlength{\parindent}{1.2em}
+\setlength{\parskip}{.25em}
+\setlength{\emergencystretch}{2em}
+% REVIEW SWITCH: main.tex supplies 1 by default; reading.tex supplies 0 first.
+% Review mode adds line numbers and revision color; reading mode hides draft notes.
+\newif\ifEcoReview
+\ifnum\ReviewMode=1\relax\EcoReviewtrue\else\EcoReviewfalse\fi
+\ifEcoReview\setstretch{1.5}\else\setstretch{1.12}\fi
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\sffamily\ShortTitle}
+\fancyhead[R]{\small\sffamily\ifEcoReview Review copy\else Reading copy\fi}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{.3pt}
+% Make linelabel safe in reading mode. The response must still import main.aux
+% from the review build, because the reading copy has no numbered lines.
+\let\EcoOriginalLineLabel\linelabel
+\renewcommand{\linelabel}[1]{\ifEcoReview\EcoOriginalLineLabel{#1}\fi}
+\newcommand{\BeginReview}{\ifEcoReview\linenumbers\fi}
+\newcommand{\EndReview}{\nolinenumbers}
+% Recent lineno handles amsmath itself. No manual redefinition of equation/align.
+% THEOREMS: these environments share one sequence. aliascnt preserves their
+% distinct names in cleveref (a proposition must not become a theorem in a link).
+% Add new statement types using the same alias-counter pattern.
+\newtheorem{theorem}{Theorem}
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+\theoremstyle{definition}
+\newaliascnt{definition}{theorem}
+\newtheorem{definition}[definition]{Definition}
+\aliascntresetthe{definition}
+\theoremstyle{remark}
+\newaliascnt{remark}{theorem}
+\newtheorem{remark}[remark]{Remark}
+\aliascntresetthe{remark}
+\crefname{theorem}{theorem}{theorems}
+\crefname{proposition}{proposition}{propositions}
+\crefname{lemma}{lemma}{lemmas}
+\crefname{corollary}{corollary}{corollaries}
+\crefname{definition}{definition}{definitions}
+% NOTATION: use semantic commands instead of repeatedly typing styling.
+% Add study-specific operators here; \dd is an upright differential, \R the reals.
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+\newcommand{\dd}{\mathop{}\!\mathrm{d}}
+\newcommand{\R}{\mathbb{R}}
+% REVISION MARKUP: use \revision{prose}; avoid wrapping entire floats or align
+% environments. \draftnote{...} disappears completely from the reading PDF.
+\newcommand{\revision}[1]{\ifEcoReview\textcolor{EcoChange}{#1}\else#1\fi}
+% Draft-only notes are removed from reading mode, including their text.
+\newcommand{\draftnote}[1]{\ifEcoReview\textcolor{EcoChange}{\textbf{[Draft note: #1]}}\fi}
+% OPTIONAL CALLOUT: use only when the manuscript benefits from a boxed explanation.
+% The title page intentionally has no submission-details box.
+\newtcolorbox{ecobox}[1]{enhanced,breakable,colback=EcoPale,colframe=EcoAccent,
+  boxrule=.4pt,arc=1mm,title={#1},fonttitle=\bfseries,
+  colbacktitle=EcoPale,coltitle=EcoInk,left=3mm,right=3mm,top=2mm,bottom=2mm}
+% Counts are generated from printed entries in each refsection, then stored for the next pass.
+\newcounter{EcoMainReferences}
+\newcounter{EcoSupplementReferences}
+\providecommand{\MainReferenceCount}{--}
+\providecommand{\SupplementReferenceCount}{--}
+\AtBeginBibliography{\small\setstretch{1.0}}
+\AtEveryBibitem{%
+  \ifnum\value{refsection}=1\stepcounter{EcoMainReferences}\fi
+  \ifnum\value{refsection}=2\stepcounter{EcoSupplementReferences}\fi}
+\AtEndDocument{%
+  \immediate\write\@auxout{\string\gdef\string\MainReferenceCount{\arabic{EcoMainReferences}}}%
+  \immediate\write\@auxout{\string\gdef\string\SupplementReferenceCount{\arabic{EcoSupplementReferences}}}}
+% SUPPLEMENT: reset printed counters AND give hyperlink anchors distinct names.
+% The theH... definitions prevent a main-text Figure 1 and Figure S1 sharing a link.
+% Page numbers restart at S1; line numbering resumes in review mode.
+% startcontents/printcontents collect only supplementary section headings; rerun
+% LaTeX until the contents and references stabilize.
+\newcommand{\StartSupplement}{%
+  \clearpage\EndReview
+  \setcounter{section}{0}\setcounter{subsection}{0}\setcounter{figure}{0}\setcounter{table}{0}%
+  \setcounter{equation}{0}\setcounter{theorem}{0}\setcounter{page}{1}%
+  \renewcommand{\thesection}{S\arabic{section}}%
+  \renewcommand{\thefigure}{S\arabic{figure}}%
+  \renewcommand{\thetable}{S\arabic{table}}%
+  \renewcommand{\theequation}{S\arabic{equation}}%
+  \renewcommand{\thetheorem}{S\arabic{theorem}}%
+  \renewcommand{\theproposition}{\thetheorem}%
+  \renewcommand{\thelemma}{\thetheorem}%
+  \renewcommand{\thecorollary}{\thetheorem}%
+  \renewcommand{\thedefinition}{\thetheorem}%
+  \renewcommand{\theremark}{\thetheorem}%
+  \renewcommand{\thepage}{S\arabic{page}}%
+  \renewcommand{\theHsection}{supp.\arabic{section}}%
+  \renewcommand{\theHfigure}{supp.\arabic{figure}}%
+  \renewcommand{\theHtable}{supp.\arabic{table}}%
+  \renewcommand{\theHequation}{supp.\arabic{equation}}%
+  \renewcommand{\theHtheorem}{supp.\arabic{theorem}}%
+  \renewcommand{\theHproposition}{\theHtheorem}%
+  \renewcommand{\theHlemma}{\theHtheorem}%
+  \renewcommand{\theHcorollary}{\theHtheorem}%
+  \renewcommand{\theHdefinition}{\theHtheorem}%
+  \renewcommand{\theHremark}{\theHtheorem}%
+  \fancyhead[R]{\small\sffamily Supplementary information}%
+  \section*{Supplementary information}%
+  \addcontentsline{toc}{section}{Supplementary information}%
+  {\large\bfseries\ManuscriptTitle\par}\medskip
+  {\small\AuthorNames\par}\bigskip
+  \startcontents[supplement]%
+  \subsection*{Contents}%
+  \printcontents[supplement]{}{1}{\setcounter{tocdepth}{2}}%
+  \bigskip\BeginReview}

@@ -1,0 +1,89 @@
+% Build main.tex first. This letter imports its actual page and line labels.
+\documentclass[11pt]{article}
+\def\ReviewMode{0}
+\input{metadata}
+\usepackage{ecology}
+\addbibresource{references.bib}
+% m- is a namespace: \cref{m-sec:methods} reads sec:methods from main.aux.
+% Keep main.pdf beside response.pdf if you distribute clickable manuscript links.
+\externaldocument[m-]{main}[main.pdf]
+\usepackage[normalem]{ulem}
+\fancyhead[R]{\small\sffamily Response to reviewers}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{.6em}
+\newcounter{reviewcomment}
+\newcommand{\ReviewerID}{E}
+\renewcommand{\thereviewcomment}{\ReviewerID.\arabic{reviewcomment}}
+\providecommand{\theHreviewcomment}{}
+\renewcommand{\theHreviewcomment}{\ReviewerID.\arabic{reviewcomment}}
+% Start each reviewer with a unique ID (E, 1, 2, ...); this resets their comments.
+% Comment numbers are automatic; do not type them into the comment text.
+\newcommand{\reviewer}[2]{%
+  \renewcommand{\ReviewerID}{#1}\setcounter{reviewcomment}{0}\section*{#2}}
+\newtcolorbox{reviewcommentbox}{enhanced,breakable,colback=white,colframe=EcoAccent,
+  boxrule=0pt,borderline west={2pt}{0pt}{EcoAccent},arc=0mm,
+  left=3mm,right=2mm,top=2mm,bottom=2mm}
+\newenvironment{reviewcomment}{\refstepcounter{reviewcomment}\begin{reviewcommentbox}
+  \textbf{Comment \thereviewcomment.}\par\smallskip}{\end{reviewcommentbox}}
+\newenvironment{reply}{\par\noindent\textbf{Response.}\ }{\par}
+\newtcolorbox{manuscriptexcerpt}{enhanced,breakable,colback=EcoPale,colframe=EcoPale,
+  boxrule=0pt,arc=1mm,left=3mm,right=3mm,top=2mm,bottom=2mm}
+\newcommand{\added}[1]{\textcolor{EcoChange}{#1}}
+\newcommand{\deleted}[1]{\textcolor{gray}{\sout{#1}}}
+% USAGE: \wherechanged{line:start}{line:end}; supply labels without the m- prefix.
+% Place corresponding \linelabel commands around the changed passage in the
+% manuscript. The helper handles both same-page and cross-page ranges.
+% Rebuild main.tex after edits, then response.tex, and check against the final PDF.
+\newcommand{\wherechanged}[2]{%
+  \begingroup
+  \edef\FirstChangePage{\getpagerefnumber{m-#1}}%
+  \edef\LastChangePage{\getpagerefnumber{m-#2}}%
+  \ifx\FirstChangePage\LastChangePage
+    page~\pageref{m-#1}%
+  \else
+    pages~\pageref{m-#1}--\pageref{m-#2}%
+  \fi, lines~\ref{m-#1}--\ref{m-#2}\endgroup}
+\begin{document}
+{\huge\bfseries Response to reviewers\par}\medskip
+{\large\ManuscriptTitle\par}\medskip
+{\small\ManuscriptID\quad\textbullet\quad\TargetJournal\quad\textbullet\quad\RevisionDate\par}
+\bigskip
+Thank the editor and reviewers briefly. State which files accompany the revision. Comments below are invented examples, not actual peer-review correspondence. Blue text marks additions and struck-through text marks deletions inside manuscript excerpts. Page and line references point to the review copy compiled from \texttt{main.tex}.
+
+% REPLACE THE EXAMPLES BELOW with the actual comments and your point-by-point replies.
+% Keep reviewcomment, reply and manuscriptexcerpt roles separate.
+\reviewer{E}{Editor}
+\begin{reviewcomment}\label{comment:editor}
+Please clarify the biological question and the scope of inference.
+\end{reviewcomment}
+\begin{reply}
+Describe the change directly and explain how it addresses the concern. The introductory example is located at \wherechanged{line:question-start}{line:question-end}.
+\begin{manuscriptexcerpt}
+The example question is how \deleted{populations change} \added{density-dependent growth approaches a carrying capacity}. The model is illustrative and is not evidence about a real population.
+\end{manuscriptexcerpt}
+\end{reply}
+
+\reviewer{1}{Reviewer 1}
+\begin{reviewcomment}\label{comment:assumptions}
+The model's assumptions should be explicit.
+\end{reviewcomment}
+\begin{reply}
+Point to the relevant section, explain the assumption and state what it limits. In this example, assumptions appear in \cref{m-sec:methods} on page~\pageref{m-sec:methods}. A mathematical result is demonstrated in \cref{m-prop:limit}. Cite additional references when they substantiate the response \citep{may1972}.
+\end{reply}
+
+\begin{reviewcomment}
+Please supply the intermediate steps of the derivation.
+\end{reviewcomment}
+\begin{reply}
+The supplementary derivation is in \cref{m-sec:supp-derivation}, including \cref{m-eq:supp-integral}. These references are generated from labels, rather than typed figure or equation numbers. A page/line range still needs checking against the exact PDF submitted to the journal.
+\end{reply}
+
+\reviewer{2}{Reviewer 2}
+\begin{reviewcomment}
+Please improve reproducibility reporting.
+\end{reviewcomment}
+\begin{reply}
+Explain what was deposited, where it can be accessed and how it maps to the analyses. Do not promise public access when data restrictions apply. For simulation-based work, the model-description protocol of \citet{grimm2006} provides a useful example.
+\end{reply}
+\printbibliography[heading=bibintoc,title={References cited in this response}]
+\end{document}
