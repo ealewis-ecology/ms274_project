@@ -11,6 +11,11 @@ data/
 data
 *.nc
 *.nc.partial
+
+# Large downloaded datasets, raster images, and generated videos
+*.h5
+*.tif
+*.mp4
 notebooks/**/*.png
 # annoying osx files
 .DS_Store
